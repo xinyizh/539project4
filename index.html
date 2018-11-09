@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Project 4</title>
+    <link rel="stylesheet" type="text/css" href="styles/canvas-style.css">
+</head>
+
+<body>
+    <main>
+        <h1>SI539 Project 4</h1>
+        <canvas id="canvas" width="800px" height="500px">
+            An alternative text describing what your canvas displays.
+        </canvas>
+        <p> Move the cursor inside the 800 x 450 pixel canvas to move a colored pen. You can alternate colors by
+            hitting
+            'b' for blue, 'g' for green, 'r' for red and 'y' for yellow.</p>
+        <p> You can also increase and decrease the circle size by using the up (larger) and down (smaller) arrow keys.
+            You
+            can clear the screen using the space bar.</p>
+    </main>
+    
+    <script>
+        var canvas = document.getElementById('canvas');
+        var ctx = canvas.getContext('2d');
+
+        ctx.lineCap = "round";
+        ctx.strokeStyle = "red";
+        ctx.lineWidth = 10;
+
+        canvas.onmousedown = function (ev) {
+            var ev = ev || event;
+            ctx.beginPath();
+            ctx.moveTo(ev.clientX - canvas.offsetLeft, ev.clientY - canvas.offsetTop);
+            ctx.arc(ev.clientX - canvas.offsetLeft, ev.clientY - canvas.offsetTop, ctx.lineWidth / 10, 0, Math.PI * 2, true);
+            ctx.stroke();
+
+            ctx.beginPath();
+            document.onmousemove = function (ev) {
+                var ev = ev || event;
+                ctx.lineTo(ev.clientX - canvas.offsetLeft, ev.clientY - canvas.offsetTop);
+                ctx.stroke();
+            }
+
+            document.onmouseup = function () {
+                document.onmousemove = null;
+                document.onmouseup = null;
+            }
+        }
+
+        document.addEventListener('keydown', function (e) {
+            var x;
+            if (window.event) x = event.keyCode;
+            else if (event.which) x = event.which;
+
+            if (x == 66) ctx.strokeStyle = "blue"; // b
+            else if (x == 71) ctx.strokeStyle = "green"; // g
+            else if (x == 82) ctx.strokeStyle = "red"; // r
+            else if (x == 89) ctx.strokeStyle = "yellow"; // y
+            else if (x == 38) ctx.lineWidth++; // up arrow
+            else if (x == 40) ctx.lineWidth--; // down arrow
+            else if (x == 32) ctx.clearRect(0, 0, 800, 500); // clear
+        })
+    </script>
+</body>
+
+</html>
